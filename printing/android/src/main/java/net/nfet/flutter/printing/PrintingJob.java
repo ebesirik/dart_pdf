@@ -18,32 +18,20 @@ package net.nfet.flutter.printing;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Matrix;
-import android.graphics.pdf.PdfRenderer;
+import android.content.res.Configuration;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.CancellationSignal;
-import android.os.Handler;
-import android.os.Looper;
 import android.os.ParcelFileDescriptor;
 import android.print.PageRange;
 import android.print.PdfConvert;
 import android.print.PrintAttributes;
-import android.print.PrintDocumentAdapter;
-import android.print.PrintDocumentInfo;
 import android.print.PrintJob;
-import android.print.PrintJobInfo;
 import android.print.PrintManager;
-import android.util.Log;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.core.content.FileProvider;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -51,6 +39,12 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.util.HashMap;
+import android.content.pm.PackageManager;
+import android.content.pm.ProviderInfo;
+import android.content.pm.ResolveInfo;
+import java.util.List;
+
+
 
 /**
  * PrintJob
@@ -73,13 +67,16 @@ public class PrintingJob extends PrintDocumentAdapter {
     }
 
     static HashMap<String, Object> printingInfo() {
+        final boolean canPrint = android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
+        final boolean canRaster = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP;
+
         HashMap<String, Object> result = new HashMap<>();
         result.put("directPrint", false);
-        result.put("dynamicLayout", true);
-        result.put("canPrint", true);
-        result.put("canConvertHtml", true);
+        result.put("dynamicLayout", canPrint);
+        result.put("canPrint", canPrint);
+        result.put("canConvertHtml", canRaster);
         result.put("canShare", true);
-        result.put("canRaster", true);
+        result.put("canRaster", canRaster);
         return result;
     }
 
@@ -143,11 +140,14 @@ public class PrintingJob extends PrintDocumentAdapter {
                                                              : printJob.getInfo().getState();
 
                                 if (state == PrintJobInfo.STATE_COMPLETED) {
-                                    printing.onCompleted(PrintingJob.this, true, "");
+                                    printing.onCompleted(PrintingJob.this, true, null);
                                     wait[0] = false;
-                                } else if (state == PrintJobInfo.STATE_CANCELED
-                                        || state == PrintJobInfo.STATE_FAILED) {
-                                    printing.onCompleted(PrintingJob.this, false, "User canceled");
+                                } else if (state == PrintJobInfo.STATE_CANCELED) {
+                                    printing.onCompleted(PrintingJob.this, false, null);
+                                    wait[0] = false;
+                                } else if (state == PrintJobInfo.STATE_FAILED) {
+                                    printing.onCompleted(
+                                            PrintingJob.this, false, "Unable to print");
                                     wait[0] = false;
                                 }
                             }
@@ -178,15 +178,15 @@ public class PrintingJob extends PrintDocumentAdapter {
         thread.start();
     }
 
-    void printPdf(@NonNull String name, Double width, Double height, Double marginLeft,
-            Double marginTop, Double marginRight, Double marginBottom) {
+    void printPdf(@NonNull String name) {
         jobName = name;
         printJob = printManager.print(name, this, null);
     }
 
-    void cancelJob() {
+    void cancelJob(String message) {
         if (callback != null) callback.onLayoutCancelled();
         if (printJob != null) printJob.cancel();
+        printing.onCompleted(PrintingJob.this, false, message);
     }
 
     static void sharePdf(final Context context, final byte[] data, final String name) {
@@ -216,6 +216,12 @@ public class PrintingJob extends PrintDocumentAdapter {
             shareIntent.putExtra(Intent.EXTRA_STREAM, apkURI);
             shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             Intent chooserIntent = Intent.createChooser(shareIntent, null);
+            List<ResolveInfo> resInfoList = context.getPackageManager().queryIntentActivities(chooserIntent, PackageManager.MATCH_DEFAULT_ONLY);
+
+            for (ResolveInfo resolveInfo : resInfoList) {
+                String packageName = resolveInfo.activityInfo.packageName;
+                context.grantUriPermission(packageName, apkURI, Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            }
             context.startActivity(chooserIntent);
             shareFile.deleteOnExit();
         } catch (IOException e) {
@@ -225,7 +231,10 @@ public class PrintingJob extends PrintDocumentAdapter {
 
     void convertHtml(final String data, final PrintAttributes.MediaSize size,
             final PrintAttributes.Margins margins, final String baseUrl) {
-        final WebView webView = new WebView(context.getApplicationContext());
+        Configuration configuration = context.getResources().getConfiguration();
+        configuration.fontScale = (float) 1;
+        Context webContext = context.createConfigurationContext(configuration);
+        final WebView webView = new WebView(webContext);
 
         webView.loadDataWithBaseURL(baseUrl, data, "text/HTML", "UTF-8", null);
 

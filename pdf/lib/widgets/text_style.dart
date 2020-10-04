@@ -157,10 +157,10 @@ class TextStyle {
       fontSize: _defaultFontSize,
       fontWeight: FontWeight.normal,
       fontStyle: FontStyle.normal,
-      letterSpacing: 1.0,
-      wordSpacing: 1.0,
-      lineSpacing: 0.0,
-      height: 1.0,
+      letterSpacing: 0,
+      wordSpacing: 1,
+      lineSpacing: 0,
+      height: 1,
       decoration: TextDecoration.none,
       decorationColor: null,
       decorationStyle: TextDecorationStyle.solid,
@@ -379,4 +379,46 @@ class TextStyle {
   @override
   String toString() =>
       'TextStyle(color:$color font:$font size:$fontSize weight:$fontWeight style:$fontStyle letterSpacing:$letterSpacing wordSpacing:$wordSpacing lineSpacing:$lineSpacing height:$height background:$background decoration:$decoration decorationColor:$decorationColor decorationStyle:$decorationStyle decorationThickness:$decorationThickness, renderingMode:$renderingMode)';
+}
+
+class Directionality extends StatelessWidget implements Inherited {
+  /// Creates a widget that determines the directionality of text and
+  /// text-direction-sensitive render objects.
+  ///
+  /// The [textDirection] and [child] arguments must not be null.
+  Directionality({
+    @required this.textDirection,
+    @required this.child,
+  })  : assert(textDirection != null),
+        assert(child != null);
+
+  /// The subtree
+  final Widget child;
+
+  /// The text direction for this subtree.
+  final TextDirection textDirection;
+
+  /// The text direction from the closest instance of this class that encloses
+  /// the given context.
+  ///
+  /// If there is no [Directionality] ancestor widget in the tree at the given
+  /// context, then this will return TextDirection.ltr.
+  ///
+  /// Typical usage is as follows:
+  ///
+  /// ```dart
+  /// TextDirection textDirection = Directionality.of(context);
+  /// ```
+  static TextDirection of(Context context) {
+    final Directionality widget = context.inherited[Directionality];
+    return widget?.textDirection ?? TextDirection.ltr;
+  }
+
+  @override
+  Widget build(Context context) {
+    return InheritedWidget(
+      build: (Context context) => child,
+      inherited: this,
+    );
+  }
 }

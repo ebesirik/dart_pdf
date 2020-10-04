@@ -1,5 +1,95 @@
 # Changelog
 
+## 1.11.2
+
+- Fix Table.fromTextArray vertical alignment
+
+## 1.11.1
+
+- Fix Table.fromTextArray alignments with multi-lines text
+- Fix parameter type typo in Table.fromTextArray [Uli Prantz]
+
+## 1.11.0
+
+- Fix mixing Arabic with English [Anas Altair]
+- Support Dagger alif in Arabic [Anas Altair]
+- Support ARABIC TATWEEL [Anas Altair]
+- Update Arabic tests [Anas Altair]
+- Add Directionality Widget
+
+## 1.10.1
+
+- Fix TTF writer with more than 256 CMAP entries
+
+## 1.10.0
+
+- Fix dependencies
+- Implement Barcode textPadding and bytes data
+
+## 1.9.0
+
+- Allow MultiPage to relayout individual pages with support for flex
+- Implement BoxShadow for rect and circle BoxDecorations
+- Implement TextStyle.letterSpacing
+- Implement Arabic writing support [Anas Altair]
+
+## 1.8.1
+
+- Fix Wrap break condition
+- Fix drawShape method [Paweł Szot]
+
+## 1.8.0
+
+- Improve Table.fromTextArray()
+- Add curved LineDataSet Chart
+- Fix PdfColors.fromHex()
+- Update Barcode library to 1.9.0
+- Fix exif orientation crash
+- Fix Spacer Widget
+
+## 1.7.1
+
+- Fix justified text softWrap issue
+- Set a default color for Dividers
+- Fix InheritedWidget issue with multiple pages
+
+## 1.7.0
+
+- Implement Linear and Radial gradients in BoxDecoration
+- Fix PdfColors.shade()
+- Add dashed lines to Decoration Widgets
+- Add TableRow decoration
+- Add Chart Widget [Marco Papula]
+- Add Divider and VerticalDivider Widget
+- Replace Theme with ThemeData
+
+## 1.6.2
+
+- Use the Barcode library to generate QR-Codes
+- Fix Jpeg size detection
+- Update dependency to Barcode 1.8.0
+- Fix graphic state operator
+
+## 1.6.1
+
+- Fix Image width and height attributes
+
+## 1.6.0
+
+- Improve Annotations
+- Implement table row vertical alignment
+- Improve Internal data structure
+- Remove deprecated functions
+- Optimize file size
+- Add PdfColor.shade
+- Uniformize examples
+- Fix context painting empty Table
+- Fix Text decoration placements
+- Improve image buffer management
+- Optimize memory footprint
+- Add an exception if a jpeg image is not a supported format
+- Add more image loading functions
+
 ## 1.5.0
 
 - Fix Align debug painting

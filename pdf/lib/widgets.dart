@@ -17,21 +17,31 @@
 library widget;
 
 import 'dart:collection';
+import 'dart:convert';
 import 'dart:math' as math;
 import 'dart:typed_data';
+import 'package:image/image.dart' as im;
 
 import 'package:barcode/barcode.dart';
 import 'package:meta/meta.dart';
 import 'package:pdf/pdf.dart';
-import 'package:qr/qr.dart';
 import 'package:vector_math/vector_math_64.dart';
+
+export 'package:barcode/barcode.dart';
 
 part 'widgets/annotations.dart';
 part 'widgets/barcode.dart';
 part 'widgets/basic.dart';
+part 'widgets/chart/bar_chart.dart';
+part 'widgets/chart/chart.dart';
+part 'widgets/chart/grid_axis.dart';
+part 'widgets/chart/grid_cartesian.dart';
+part 'widgets/chart/legend.dart';
+part 'widgets/chart/line_chart.dart';
 part 'widgets/clip.dart';
 part 'widgets/container.dart';
 part 'widgets/content.dart';
+part 'widgets/decoration.dart';
 part 'widgets/document.dart';
 part 'widgets/flex.dart';
 part 'widgets/font.dart';

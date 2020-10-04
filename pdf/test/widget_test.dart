@@ -38,7 +38,7 @@ void main() {
 
     pdf = Document(
         title: 'Widgets Test',
-        theme: Theme.withFont(
+        theme: ThemeData.withFont(
           base: Font.ttf(defaultFont.buffer.asByteData()),
           bold: Font.ttf(defaultFontBold.buffer.asByteData()),
         ));
@@ -164,7 +164,7 @@ void main() {
           build: (Context context) => <Widget>[
             Table.fromTextArray(
               context: context,
-              margin: const EdgeInsets.all(3),
+              cellPadding: const EdgeInsets.all(3),
               data: <List<String>>[
                 <String>['Company', 'Contact', 'Country'],
                 <String>['Alfreds Futterkiste', 'Maria Anders', 'Germany'],

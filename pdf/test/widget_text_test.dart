@@ -18,15 +18,17 @@
 
 import 'dart:io';
 import 'dart:math' as math;
-import 'dart:typed_data';
 
-import 'package:test/test.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart';
+import 'package:test/test.dart';
+
+import 'utils.dart';
 
 Document pdf;
 Font ttf;
 Font ttfBold;
+Font asian;
 
 Iterable<TextDecoration> permute(
     List<TextDecoration> prefix, List<TextDecoration> remaining) sync* {
@@ -44,10 +46,10 @@ void main() {
   setUpAll(() {
     Document.debug = true;
     RichText.debug = true;
-    final Uint8List fontData = File('open-sans.ttf').readAsBytesSync();
-    ttf = Font.ttf(fontData.buffer.asByteData());
-    final Uint8List fontDataBold = File('open-sans-bold.ttf').readAsBytesSync();
-    ttfBold = Font.ttf(fontDataBold.buffer.asByteData());
+
+    ttf = loadFont('open-sans.ttf');
+    ttfBold = loadFont('open-sans-bold.ttf');
+    asian = loadFont('genyomintw.ttf');
     pdf = Document();
   });
 
@@ -129,9 +131,12 @@ void main() {
     final String para = LoremText().paragraph(40);
 
     final List<Widget> widgets = <Widget>[];
-    for (double spacing = 0.0; spacing < 10.0; spacing += 2.0) {
+    for (double spacing = -1.0; spacing < 8.0; spacing += 2.0) {
       widgets.add(
-        Text(para, style: TextStyle(font: ttf, letterSpacing: spacing)),
+        Text(
+          '[$spacing] $para',
+          style: TextStyle(font: ttf, letterSpacing: spacing),
+        ),
       );
       widgets.add(
         SizedBox(height: 30),
@@ -242,6 +247,29 @@ void main() {
                 ),
               ),
             ]));
+  });
+
+  test('Text Widgets RichText Multiple lang', () {
+    pdf.addPage(Page(
+      build: (Context context) => RichText(
+        text: TextSpan(
+          text: 'Hello ',
+          style: TextStyle(
+            font: ttf,
+            fontSize: 20,
+          ),
+          children: <InlineSpan>[
+            TextSpan(
+              text: '中文',
+              style: TextStyle(font: asian),
+            ),
+            const TextSpan(
+              text: ' world!',
+            ),
+          ],
+        ),
+      ),
+    ));
   });
 
   tearDownAll(() {

@@ -14,7 +14,7 @@ public class PrintingHandler implements MethodChannel.MethodCallHandler {
     private final Activity activity;
     private final MethodChannel channel;
 
-    public PrintingHandler(@NonNull Activity activity, @NonNull MethodChannel channel) {
+    PrintingHandler(@NonNull Activity activity, @NonNull MethodChannel channel) {
         this.activity = activity;
         this.channel = channel;
     }
@@ -34,8 +34,7 @@ public class PrintingHandler implements MethodChannel.MethodCallHandler {
                 final PrintingJob printJob =
                         new PrintingJob(activity, this, (int) call.argument("job"));
                 assert name != null;
-                printJob.printPdf(
-                        name, width, height, marginLeft, marginTop, marginRight, marginBottom);
+                printJob.printPdf(name);
 
                 result.success(1);
                 break;
@@ -43,7 +42,7 @@ public class PrintingHandler implements MethodChannel.MethodCallHandler {
             case "cancelJob": {
                 final PrintingJob printJob =
                         new PrintingJob(activity, this, (int) call.argument("job"));
-                printJob.cancelJob();
+                printJob.cancelJob(null);
                 result.success(1);
                 break;
             }
@@ -125,18 +124,18 @@ public class PrintingHandler implements MethodChannel.MethodCallHandler {
                 if (result instanceof byte[]) {
                     printJob.setDocument((byte[]) result);
                 } else {
-                    printJob.cancelJob();
+                    printJob.cancelJob("Unknown data received");
                 }
             }
 
             @Override
             public void error(String errorCode, String errorMessage, Object errorDetails) {
-                printJob.cancelJob();
+                printJob.cancelJob(errorMessage);
             }
 
             @Override
             public void notImplemented() {
-                printJob.cancelJob();
+                printJob.cancelJob("notImplemented");
             }
         });
     }

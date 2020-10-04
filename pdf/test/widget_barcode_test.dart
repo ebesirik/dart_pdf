@@ -18,14 +18,17 @@
 
 import 'dart:io';
 
-import 'package:barcode/barcode.dart';
-import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart';
 import 'package:test/test.dart';
 
 Document pdf;
 
-Widget barcode(Barcode barcode, String data, {double width = 200}) {
+Widget barcode(
+  Barcode barcode,
+  String data, {
+  double width = 200,
+  double height = 80,
+}) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
     children: <Widget>[
@@ -42,7 +45,7 @@ Widget barcode(Barcode barcode, String data, {double width = 200}) {
             barcode: barcode,
             data: data,
             width: width,
-            height: 80,
+            height: height,
             margin: const EdgeInsets.symmetric(vertical: 20),
           ),
         ),
@@ -53,7 +56,7 @@ Widget barcode(Barcode barcode, String data, {double width = 200}) {
 
 void main() {
   setUpAll(() {
-    Document.debug = true;
+    // Document.debug = true;
     pdf = Document();
   });
 
@@ -72,30 +75,13 @@ void main() {
           barcode(Barcode.ean2(), '44', width: 40),
           barcode(Barcode.ean5(), '30897', width: 60),
           barcode(Barcode.itf14(), '2578639587234'),
+          barcode(Barcode.telepen(), 'Telepen'),
+          barcode(Barcode.codabar(), '1234-5678'),
+          barcode(Barcode.qrCode(), 'QR-Code!', width: 120, height: 120),
+          barcode(Barcode.pdf417(), 'PDF147 Demo', height: 35),
+          barcode(Barcode.dataMatrix(), 'Data Matrix', width: 120, height: 120),
+          barcode(Barcode.aztec(), 'Aztec', width: 120, height: 120),
         ],
-      ),
-    );
-  });
-
-  test('QrCode Widgets', () {
-    pdf.addPage(
-      Page(
-        build: (Context context) => QrCodeWidget(
-          data: 'HELLO 123',
-          size: 200,
-          padding: const EdgeInsets.all(20),
-          margin: const EdgeInsets.all(20),
-          decoration: const BoxDecoration(
-              borderRadius: 20,
-              color: PdfColors.white,
-              border: BoxBorder(
-                color: PdfColors.blue,
-                top: true,
-                bottom: true,
-                left: true,
-                right: true,
-              )),
-        ),
       ),
     );
   });

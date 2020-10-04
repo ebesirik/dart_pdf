@@ -1,5 +1,58 @@
 # Changelog
 
+## 3.6.2
+
+- Added theme color to dropdown item in pageFormat selector in page preview
+
+## 3.6.1
+
+- Update the example to use PdfPreview
+- Add missing `await`s
+
+## 3.6.0
+
+- Added pdfFileName prop to PdfPreview Widget [Marcos Rodriguez]
+- Fix PdfPreview unhandled exception when popped [computib]
+- Allow to disable actions in PdfPreview [Nicolas Lopez]
+
+## 3.5.0
+
+- Add decoration options to the PdfPreview Widget [Marcos Rodriguez]
+- Allow building for Android SDK 16
+- Fix font scaling in convertHtml()
+
+## 3.4.0
+
+- Add PdfPreview Widget
+- Implement Printing.raster() on Flutter Web
+- Fix Swift 5 deprecated function
+- Improve code documentation
+
+## 3.3.1
+
+- Remove width and height parameters from wrapWidget helper
+
+## 3.3.0
+
+- Add wrapWidget helper
+- Add integration tests for wrapWidget
+
+## 3.2.1
+
+- Add meta and image dependencies
+
+## 3.2.0
+
+- Update README
+- Remove deprecated API
+- Use plugin_platform_interface
+- Fix inconsistent API
+- Add Unit tests
+- Update example tab
+- Uniformize examples
+- Optimize memory footprint
+- Add PdfRaster.asImage()
+
 ## 3.1.0
 
 - Migrate to the new Android plugins APIs
@@ -21,7 +74,7 @@ Breaking change: this version is only compatible with flutter >= 1.12
 - Improve native code
 - Add Printing.info()
 - Use PageTheme in example
-- Save shared pdf in cache on Android
+- Save shared pdf in the cache on Android
 - Implement macOS embedding support
 - Implement Flutter Web support
 
@@ -44,7 +97,7 @@ Breaking change: this version is only compatible with flutter >= 1.12
 
 ## 2.1.6
 
-- Add qrcode to example
+- Add QrCode to example
 - Cancel print job in case of layout error
 
 ## 2.1.5
@@ -66,7 +119,7 @@ Breaking change: this version is only compatible with flutter >= 1.12
 
 ## 2.1.0
 
-- Add html to pdf platform conversion
+- Add HTML to pdf platform conversion
 - Fix issue with flutter 1.6.2+
 
 ## 2.0.4
@@ -75,7 +128,7 @@ Breaking change: this version is only compatible with flutter >= 1.12
 
 ## 2.0.3
 
-- Add file save and view to example application
+- Add file save and view to the example application
 - Convert print screen example to Widgets
 - Deprecate the document argument in Printing.sharePdf()
 
@@ -118,15 +171,15 @@ Breaking change: this version is only compatible with flutter >= 1.12
 
 ## 1.3.1
 
-- Fix pana linting notices
+- Fix Pana linting notices
 
 ## 1.3.0
 
-- Add a Flutter like widget system
+- Add a Flutter like Widget system
 
 ## 1.2.0
 
-- Fix compileSdkVersion to match appcompat
+- Fix compileSdkVersion to match AppCompat
 - Change license to Apache 2.0
 - Implement asynchronous printing driven by the OS
 
@@ -134,7 +187,7 @@ Breaking change: this version is only compatible with flutter >= 1.12
 
 - Rename classes to satisfy Dart conventions
 - Remove useless new and const keywords
-- Changed appcompat dependency to 26.1.0
+- Changed AppCompat dependency to 26.1.0
 
 ## 1.0.6
 
@@ -161,7 +214,7 @@ Breaking change: this version is only compatible with flutter >= 1.12
 
 ## 1.0.1
 
-- Fixed sdk version
+- Fixed SDK version
 
 ## 1.0.0
 
